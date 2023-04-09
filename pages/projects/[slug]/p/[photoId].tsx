@@ -86,7 +86,8 @@ export async function getStaticPaths() {
   }
 
   const totalPaths = [...fullPaths, ...OtherPaths]
-
+  // console.log(totalPaths);
+  
   return {
     paths: totalPaths,
     fallback: true,
@@ -96,7 +97,7 @@ export async function getStaticPaths() {
 export const getStaticProps: GetStaticProps = async (context) => {
   const { params } = context;
   const { slug, photoId } = params;
-
+  console.log(slug, photoId)
   // await avoidRateLimit()
   const { results: images } = await getResults({ slug });
 

@@ -6,6 +6,7 @@ import getResults from '@/utils/cachedImages'
 import getBase64ImageUrl from '@/utils/generateBlurPlaceholder'
 import fetchSlugs from '@/utils/fetchSlugs'
 import type { ImageProps } from '@/utils/types'
+import client from 'libs/contentful'
 
 interface PhotoIdProps {
   currentPhoto: ImageProps;
@@ -43,32 +44,62 @@ const PhotoId: NextPage<PhotoIdProps> = ({ currentPhoto }) => {
 
 export default PhotoId
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  // Replace "fetchSlugs" with your own function to fetch slugs
-  // const {projects} = await fetchSlugs();
-  // const fullPaths = projects.flatMap(project => {
-  //   return project.assets.map((photoId,index) => ({
-  //     params: {
-  //       slug: project.id,
-  //       photoId: index.toString()
-  //     }
-  //   }))
-  // })
+
+// export async function getStaticPaths() {
+//   await avoidRateLimit()
+//   const entry: any = await client.getEntry('5LfwKllpyXoFuxsbyBaYvC');
+
+//   const fullPaths = [];
+
+//   entry.fields.projects.forEach(project => {
+//     const numAssets = project.fields.assets.length;
+//     for (let i = 0; i < numAssets; i++) {
+//       fullPaths.push({ params: { slug: project.sys.id, photoId: i.toString() } });
+//     }
+//   });
+
+//   return {
+//     paths: fullPaths,
+//     fallback: true,
+//   };
+// }
+
+export async function getStaticPaths() {
+  const entry: any = await client.getEntry('5LfwKllpyXoFuxsbyBaYvC');
+
+  const fullPaths = [];
+
+  const project = entry.fields.projects[0];
+  const numAssets = project.fields.assets.length;
   
+  for (let i = 0; i < numAssets; i++) {
+    fullPaths.push({ params: { slug: project.sys.id, photoId: i.toString() } });
+  }
+
+  const OtherPaths = [];
+
+  const project1 = entry.fields.projects[1];
+  const numAssets1 = project1.fields.assets.length;
+  
+  for (let i = 0; i < 6; i++) {
+    OtherPaths.push({ params: { slug: project1.sys.id, photoId: i.toString() } });
+  }
+
+  const totalPaths = [...fullPaths, ...OtherPaths]
+
   return {
-    paths: [],
-    fallback: 'blocking', // Or true or 'blocking' depending on your needs
+    paths: totalPaths,
+    fallback: true,
   };
-};
+}
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const { params } = context;
   const { slug, photoId } = params;
 
-  // Use destructuring and rename properties for better readability
+  // await avoidRateLimit()
   const { results: images } = await getResults({ slug });
 
-  // Use Array.map instead of for loop to simplify code
   const reducedResults = images.map((result, i) => ({
     id: i,
     height: result.height,
@@ -85,3 +116,15 @@ export const getStaticProps: GetStaticProps = async (context) => {
     },
   };
 }
+
+
+
+// export function avoidRateLimit(delay = 500) {
+//   if (!process.env.IS_BUILD) {
+//     return
+//   }
+
+//   return new Promise((resolve) => {
+//     setTimeout(resolve, delay)
+//   })
+// }

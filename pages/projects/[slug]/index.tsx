@@ -127,6 +127,7 @@ export default Project
 
 export async function getStaticProps({params}) {
   const { slug } = params;
+  await avoidRateLimit();
   const entry: MyEntry = await client.getEntry(slug);
   const project_images = {
     results: entry.fields.assets.map(asset => {
@@ -169,6 +170,7 @@ export async function getStaticProps({params}) {
 
 
 export async function getStaticPaths() {
+  await avoidRateLimit();
   const entry: any = await client.getEntry('5LfwKllpyXoFuxsbyBaYvC');
 
   let fullPaths = [];
@@ -186,3 +188,12 @@ export async function getStaticPaths() {
 
 
 
+export function avoidRateLimit(delay = 500) {
+  if (!process.env.IS_BUILD) {
+    return
+  }
+
+  return new Promise((resolve) => {
+    setTimeout(resolve, delay)
+  })
+}

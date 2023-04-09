@@ -1,5 +1,4 @@
 import client from 'libs/contentful';
-import cloudinary from './cloudinary'
 
 let cachedResults
 

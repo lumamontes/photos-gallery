@@ -1,17 +1,26 @@
+import client from 'libs/contentful';
 import cloudinary from './cloudinary'
 
 let cachedResults
 
-export default async function getResults() {
+export default async function getResults({slug}) {
   if (!cachedResults) {
-    const fetchedResults = await cloudinary.v2.search
-      .expression(`folder:${process.env.CLOUDINARY_FOLDER}/*`)
-      .sort_by('public_id', 'desc')
-      .max_results(400)
-      .execute()
+    const entry: any = await client.getEntry(slug);
 
-    cachedResults = fetchedResults
+    const project_images = {
+      results: entry.fields.assets.map(asset => {
+        return {
+          height: asset.height,
+          width: asset.width,
+          public_id: asset.public_id,
+          format: asset.format,
+        }
+      })}
+
+    cachedResults = project_images
   }
 
   return cachedResults
 }
+
+

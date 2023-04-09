@@ -8,16 +8,20 @@ import SharedModal from './SharedModal'
 export default function Carousel({
   index,
   currentPhoto,
+  slug,
+  images
 }: {
   index: number
-  currentPhoto: ImageProps
+  currentPhoto: ImageProps,
+  slug: string |string[],
+  images: any
 }) {
   const router = useRouter()
   const [, setLastViewedPhoto] = useLastViewedPhoto()
 
   function closeModal() {
     setLastViewedPhoto(currentPhoto.id)
-    router.push('/', undefined, { shallow: true })
+    router.push(`/projects/${slug}`, undefined, { shallow: true })
   }
 
   function changePhotoId(newVal: number) {
@@ -27,27 +31,28 @@ export default function Carousel({
   useKeypress('Escape', () => {
     closeModal()
   })
-
   return (
     <div className="fixed inset-0 flex items-center justify-center">
       <button
-        className="absolute inset-0 z-30 cursor-default bg-black backdrop-blur-2xl"
+        className="absolute inset-0 z-30 cursor-default backdrop-blur-2xl"
         onClick={closeModal}
       >
-        <Image
+        
+      </button>
+      <Image
           src={currentPhoto.blurDataUrl}
           className="pointer-events-none h-full w-full"
           alt="blurred background"
           fill
           priority={true}
         />
-      </button>
       <SharedModal
         index={index}
         changePhotoId={changePhotoId}
         currentPhoto={currentPhoto}
         closeModal={closeModal}
         navigation={false}
+        images={images}
       />
     </div>
   )

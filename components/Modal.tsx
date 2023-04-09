@@ -55,7 +55,8 @@ export default function Modal({
     }
   })
 
-  return (
+  
+return (
     <Dialog
       static
       open={true}
@@ -77,7 +78,7 @@ export default function Modal({
         images={images}
         changePhotoId={changePhotoId}
         closeModal={handleClose}
-        navigation={true}
+        navigation={false}
       />
     </Dialog>
   )

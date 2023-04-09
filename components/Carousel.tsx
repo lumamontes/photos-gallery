@@ -9,12 +9,10 @@ export default function Carousel({
   index,
   currentPhoto,
   slug,
-  images
 }: {
   index: number
   currentPhoto: ImageProps,
   slug: string |string[],
-  images: any
 }) {
   const router = useRouter()
   const [, setLastViewedPhoto] = useLastViewedPhoto()
@@ -52,7 +50,6 @@ export default function Carousel({
         currentPhoto={currentPhoto}
         closeModal={closeModal}
         navigation={false}
-        images={images}
       />
     </div>
   )

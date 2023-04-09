@@ -9,6 +9,7 @@ export default async function fetchSlugs() {
       projects: entry.fields.projects.map(project => {
         return {
           id: project.sys.id,
+          assets:project.fields.assets,
           count_assets: project.fields.assets.length
         };
       }),

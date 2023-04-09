@@ -3,18 +3,30 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import Carousel from '@/components/Carousel'
 import getResults from '@/utils/cachedImages'
-import cloudinary from '@/utils/cloudinary'
 import getBase64ImageUrl from '@/utils/generateBlurPlaceholder'
-import type { ImageProps } from '@/utils/types'
-import client from 'libs/contentful'
 import fetchSlugs from '@/utils/fetchSlugs'
-import fetchPhotoIds from '@/utils/fetchPhotoIds'
+import type { ImageProps } from '@/utils/types'
 
-const Home: NextPage = ({ currentPhoto,entry, images }: { currentPhoto: ImageProps, entry:any, images:any }) => {
-  const router = useRouter()
-  const { photoId, slug } = router.query
-  let index = Number(photoId)
-  const currentPhotoUrl = `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/c_scale,w_2560/${currentPhoto?.public_id}.${currentPhoto.format}`
+interface PhotoIdProps {
+  currentPhoto: ImageProps;
+}
+
+const PhotoId: NextPage<PhotoIdProps> = ({ currentPhoto }) => {
+  const router = useRouter();
+
+  if (!router.query || !currentPhoto) {
+    return <div>Loading...</div>;
+  }
+
+  const { photoId, slug } = router.query as { photoId: string, slug: string };
+  let index = Number(photoId);
+
+  if (currentPhoto == undefined) {
+    return <div>Photo not found.</div>;
+  }
+  
+  console.log(currentPhoto.public_id)
+  const currentPhotoUrl = 'https://res.cloudinary.com/' + process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME + '/image/upload/c_scale,w_2560/' + currentPhoto.public_id + '.' + currentPhoto.format;
 
   return (
     <>
@@ -23,60 +35,53 @@ const Home: NextPage = ({ currentPhoto,entry, images }: { currentPhoto: ImagePro
         <meta name="twitter:image" content={currentPhotoUrl} />
       </Head>
       <div className="relative mx-auto max-w-[1960px] h-full p-4">
-        <Carousel currentPhoto={currentPhoto} index={index} slug={slug} images={images}/>
+        <Carousel currentPhoto={currentPhoto} index={index} slug={slug}/>
       </div>
     </>
   )
 }
 
-export default Home
-
-export const getStaticProps: GetStaticProps = async (context) => {
-  const { params } = context;
-  const { slug } = params;
-  const images = await getResults({slug})
-  const entry: any = await client.getEntry(`${slug}`);
-
-  let reducedResults: ImageProps[] = []
-  let i = 0
-  for (let result of images.results) {
-    reducedResults.push({
-      id: i,
-      height: result.height,
-      width: result.width,
-      public_id: result.public_id,
-      format: result.format,
-    })
-    i++
-  }
-
-  const currentPhoto = reducedResults.find(
-    (img) => img.id === Number(context.params.photoId)
-  )
-  currentPhoto.blurDataUrl = await getBase64ImageUrl(currentPhoto)
-
-  return {
-    props: {
-      currentPhoto: currentPhoto,
-      images: images.results
-    },
-  }
-}
+export default PhotoId
 
 export const getStaticPaths: GetStaticPaths = async () => {
   // Replace "fetchSlugs" with your own function to fetch slugs
-  const slugs = await fetchSlugs();
-
-  const paths = [];
-  // Loop through the array of objects and generate paths
-  slugs.projects.forEach((slug) => {
-    for (let i = 0; i < slug.count_assets; i++) {
-      paths.push({ params: { slug: slug.id, photoId: i.toString() } });
-    }
-  });
-
+  // const {projects} = await fetchSlugs();
+  // const fullPaths = projects.flatMap(project => {
+  //   return project.assets.map((photoId,index) => ({
+  //     params: {
+  //       slug: project.id,
+  //       photoId: index.toString()
+  //     }
+  //   }))
+  // })
+  
   return {
-    paths: paths,
-    fallback: false, // Or true or 'blocking' depending on your needs
+    paths: [],
+    fallback: 'blocking', // Or true or 'blocking' depending on your needs
   };
 };
+
+export const getStaticProps: GetStaticProps = async (context) => {
+  const { params } = context;
+  const { slug, photoId } = params;
+
+  // Use destructuring and rename properties for better readability
+  const { results: images } = await getResults({ slug });
+
+  // Use Array.map instead of for loop to simplify code
+  const reducedResults = images.map((result, i) => ({
+    id: i,
+    height: result.height,
+    width: result.width,
+    public_id: result.public_id,
+    format: result.format,
+  }));
+
+  const currentPhoto = reducedResults.find((img) => img.id === Number(photoId));
+  currentPhoto.blurDataUrl = await getBase64ImageUrl(currentPhoto);
+  return {
+    props: {
+      currentPhoto,
+    },
+  };
+}

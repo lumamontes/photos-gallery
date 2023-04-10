@@ -127,7 +127,7 @@ export default function SharedModal({
                   </a>
                 ) : (
                   <a
-                    href={`https://twitter.com/intent/tweet?text=Check%20out%20this%20pic%20from%20Next.js%20Conf!%0A%0Ahttps://nextjsconf-pics.vercel.app/p/${index}`}
+                    href={`https://twitter.com/intent/tweet?text=Check%20out%20this%20pic%20from%20Next.js%20Conf!%0A%0Ahttps://katelynnee.vercel.app/p/${index}`}
                     className="rounded-full bg-black/50 p-2 text-gray-200/75 backdrop-blur-lg transition hover:bg-black/75 hover:text-gray-200"
                     target="_blank"
                     title="Open fullsize version"

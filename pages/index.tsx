@@ -31,17 +31,17 @@ interface portfolioPageProps {
 }
 
 
-const Home: NextPage = ({ portfolioPage,entry }: portfolioPageProps) => {
+const Home: NextPage = ({ portfolioPage }: portfolioPageProps) => {
   return (
     <>
       <Head>
         <meta
           property="og:image"
-          content="https://nextjsconf-pics.vercel.app/og-image.png"
+          content="https://katelynnee.vercel.app/og-image.png"
         />
         <meta
           name="twitter:image"
-          content="https://nextjsconf-pics.vercel.app/og-image.png"
+          content="https://katelynnee.vercel.app/og-image.png"
         />
       </Head>
       <main>
@@ -65,7 +65,7 @@ export default Home
 
 export async function getStaticProps() {
   const entry: MyEntry = await client.getEntry('5LfwKllpyXoFuxsbyBaYvC');
-
+  
   const portfolioPage = {
     heading: entry.fields.heading,
     description: entry.fields.description,
@@ -90,8 +90,7 @@ export async function getStaticProps() {
 
   return {
     props: {
-      portfolioPage: portfolioPage,
-      entry: entry,
+      portfolioPage: portfolioPage
     },
   }
 }

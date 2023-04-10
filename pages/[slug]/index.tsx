@@ -13,6 +13,7 @@ import { useLastViewedPhoto } from '@/utils/useLastViewedPhoto'
 import client from 'libs/contentful'
 import {  Entry } from 'contentful';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
+import { getHashString } from '@/utils/getHashString';
 
 interface ProjectSlugProps {
     title: string;
@@ -45,7 +46,6 @@ const Project: NextPage = ({ images, entry }: ProjectSlugProps) => {
 
     
   const lastViewedPhotoRef = useRef<HTMLAnchorElement>(null)
-
   useEffect(() => {
     // This effect keeps track of the last viewed photo in the modal to keep the index page in sync when the user navigates back
     if (lastViewedPhoto && !photoId) {
@@ -87,8 +87,12 @@ const Project: NextPage = ({ images, entry }: ProjectSlugProps) => {
           {images.map(({ id, public_id, format, blurDataUrl }) => (
             <Link
               key={id}
-              href={`/projects/${slug}/?photoId=${id}`}
-              as={`/projects/${slug}/p/${id}`}
+              href={{
+                pathname: `/${slug}`,
+                query: {photoId: getHashString(public_id)},
+              }
+              }
+              as={`/${slug}/p/${getHashString(public_id)}`}
               ref={id === Number(lastViewedPhoto) ? lastViewedPhotoRef : null}
               shallow
               className="after:content group relative mb-5 block w-full cursor-zoom-in after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight"
@@ -179,7 +183,6 @@ export async function getStaticPaths() {
     fallback: false,
   }
 }
-
 
 
 export function avoidRateLimit(delay = 500) {

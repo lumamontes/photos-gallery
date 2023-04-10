@@ -5,9 +5,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { Heading } from "./atoms/Heading";
+import useSWR from "swr";
+import { getSocialMediaLinks } from "@/utils/getSocialMediaLinks";
+
 
 export default function Navbar(props) {
-  const [links, setLinks] = useState(null);
+  const { data: socialMediaLinks, error } = useSWR("socialMediaLinks", getSocialMediaLinks);
+
   const leftmenu = [
     {
       label: "Portfolio",
@@ -21,19 +25,8 @@ export default function Navbar(props) {
 
     },
   ];
+  const rightmenu = !socialMediaLinks ? [] : socialMediaLinks;
 
-  const rightmenu = [
-    {
-        label: "socials",
-        href: "/",
-        external: false
-      },
-      {
-        label: "socials 2",
-        href: "/about",
-        external: false
-      },
-  ];
 
   const mobilemenu = [...leftmenu, ...rightmenu];
   const router = useRouter();

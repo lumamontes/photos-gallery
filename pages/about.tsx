@@ -65,7 +65,7 @@ interface aboutPageProps {
 
 
   
-export default function About({ about, entry }: aboutPageProps) {
+export default function About({ about }: aboutPageProps) {
   return (
     <>
       <Container>
@@ -90,8 +90,8 @@ export default function About({ about, entry }: aboutPageProps) {
         <div className="mx-auto prose text-center dark:prose-invert mt-14 leading-loose">
           <small className="text-gray-500"><em>Updated {about.updated_at}</em></small>
         </div>
+        <Contact contacts={about.contact} siteconfig={''}/>
       </Container>
-    <Contact contacts={about.contact} siteconfig={''}/>
     </>
 
   );
@@ -121,8 +121,7 @@ export async function getStaticProps() {
   
     return {
       props: {
-        about: aboutPage,
-        entry: entry,
+        about: aboutPage
       },
     }
   }

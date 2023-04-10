@@ -11,11 +11,11 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <title>Katelyn Nee</title>
         <meta
           property="og:image"
-          content="https://nextjsconf-pics.vercel.app/og-image.png"
+          content="https://katelynnee.vercel.app/og-image.png"
         />
         <meta
           name="twitter:image"
-          content="https://nextjsconf-pics.vercel.app/og-image.png"
+          content="https://katelynnee.vercel.app/og-image.png"
         />
       </Head>
       <Navbar />

@@ -1,31 +1,34 @@
-# Next.js & Cloudinary example app
 
-This example shows how to create an image gallery site using Next.js, [Cloudinary](https://cloudinary.com), and [Tailwind](https://tailwindcss.com).
+### Photos Gallery Website
 
-## Deploy your own
+This website is a photo gallery built using Next.js, Contentful, Cloudinary, and Tailwind. Its primary function is to showcase a portfolio of images, along with sample text for context. The website sources its data from Contentful CMS and utilizes static site generation for its page rendering.
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example) or view the demo [here](https://nextconf-images.vercel.app/)
+Key features of the site include a photo gallery with images for each project, an about page, and a contact page with a Web3Forms-powered form. The site also leverages the Cloudinary API for image manipulation, such as blur backgrounds, and has detailed pages for each photo, which are created using static paths.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/vercel/next.js/tree/canary/examples/with-cloudinary&project-name=nextjs-image-gallery&repository-name=with-cloudinary&env=NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,CLOUDINARY_API_KEY,CLOUDINARY_API_SECRET,CLOUDINARY_FOLDER&envDescription=API%20Keys%20from%20Cloudinary%20needed%20to%20run%20this%20application.)
+This website was based on the image gallery template from [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example), and the original demo is available [here](https://nextconf-images.vercel.app/)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
-## How to use
+<p align="center"> 
+</p>
 
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init), [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/), or [pnpm](https://pnpm.io) to bootstrap the example::
 
-```bash
- npx create-next-app --example with-cloudinary nextjs-image-gallery
-```
+### :bulb: Live
 
-```bash
-yarn create next-app --example with-cloudinary nextjs-image-gallery
-```
+The demo is availible at: https://katelynnee.vercel.app/
 
-```bash
-pnpm create next-app --example with-cloudinary nextjs-image-gallery
-```
+ ### :computer: Techs:
 
-## References
+- Next.js 
+- Tailwind
+- Contentful
+- Cloudinary
+- Web3Forms 
 
-- Cloudinary API: https://cloudinary.com/documentation/transformation_reference
+###  Local Development
+
+To run the website locally, follow these steps:
+
+1. Clone the repository to your local machine.
+2. Install the dependencies by running ```npm install```
+3. Start the development server by running ```npm run dev ```
+4. Open the website in your browser by visiting http://localhost:3000.
